@@ -1,11 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieSession = require("cookie-session");
+const prisma = require('./src/config/database');
+const router = require("./src/routes/main")
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(
@@ -20,6 +22,15 @@ app.use(
   })
 );
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.use('/api', router);
+
+
+prisma.$connect()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to the database:', error);
+  });

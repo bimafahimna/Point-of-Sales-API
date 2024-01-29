@@ -1,48 +1,55 @@
-const prisma =  require('../config/database')
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const prisma = require('../config/database');
 
-app.post('/register', async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      const user = await prisma.user.create({
-        data: {
-          email,
-          password,
-        },
-      });
-  
-      res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-});
+const register = async (req, res) => {
+  const { name, username, password, position, image } = req.body;
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      const user = await prisma.user.findUnique({
-        where: {
-          email,
-        },
-      });
-  
-      if (!user || user.password !== password) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-      
-      const token = jwt.sign({ userId: user.id }, 'your-jwt-secret', { expiresIn: '1h' });
-  
-      req.session.token = token;
-  
-      res.status(200).json({ message: 'Login successful', token });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.employee.create({
+      data: {
+        name,
+        username,
+        password: hashedPassword,
+        position,
+        image,
+      },
+    });
+
+    res.status(201).json({ userId: user.employee_id, username: user.username });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await prisma.employee.findUnique({
+      where: { username },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
-});
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user.employee_id, username: user.username }, 'your-secret-key');
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   register,
