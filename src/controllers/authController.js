@@ -20,7 +20,7 @@ const register = async (req, res) => {
     res.status(201).json({ userId: user.employee_id, username: user.username });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Failed to register user' });
   }
 };
 
@@ -28,8 +28,14 @@ const login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Invalid input' });
+    }
+
     const user = await prisma.employee.findUnique({
-      where: { username },
+      where: {
+        username: username,
+      },
     });
 
     if (!user) {
@@ -42,12 +48,12 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user.employee_id, username: user.username }, 'your-secret-key');
-
+    const token = jwt.sign({ userId: user.employee_id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.status(200).json({ token });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Failed to log in' });
   }
 };
 
