@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cookieSession = require("cookie-session");
 const prisma = require('./src/config/database');
 const router = require("./src/routes/main")
+const errorHandler = require("./src/middlewares/errorHandler");
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use('/api', router);
+app.use(errorHandler);
 
 
 prisma.$connect()
