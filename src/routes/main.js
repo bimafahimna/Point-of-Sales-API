@@ -16,3 +16,4 @@ router.use('/products', productRoutes);
 router.use('/inventories', inventoryRoutes);
 
 module.exports = router;
+``

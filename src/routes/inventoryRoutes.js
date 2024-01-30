@@ -10,10 +10,10 @@ const {
 
 const router = express.Router();
 
-router.post("/inventories", createInventory);
-router.get("/inventories", getInventories);
-router.get("/inventories/:product_id", getInventoryByProduct);
-router.put("/inventories/:product_id", updateInventory);
-router.delete("/inventories/:product_id", deleteInventory);
+router.post("/", createInventory);
+router.get("/", getInventories);
+router.get("/:product_id", getInventoryByProduct);
+router.put("/:product_id", updateInventory);
+router.delete("/:product_id", deleteInventory);
 
 module.exports = router;
