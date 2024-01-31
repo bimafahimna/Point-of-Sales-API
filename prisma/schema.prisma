@@ -10,73 +10,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  customer_id  Int      @id @default(autoincrement())
-  name         String
-  phone_number String
-  email        String
-  created_at   DateTime @default(now())
-  updated_at   DateTime?
-  transactions Transaction[]
+// model Customer {
+//   customer_id  Int      @id @default(autoincrement())
+//   name         String
+//   phone_number String
+//   email        String
+//   created_at   DateTime @default(now())
+//   updated_at   DateTime?
+//   transactions Transaction[]
+// }
+
+model ProductList {
+  productlist_id        Int      @id @default(autoincrement())
+  name                  String
+  created_at            DateTime @default(now())
+  updated_at            DateTime?
+  transactions          Transaction[]
 }
 
-model Product {
-  product_id        Int      @id @default(autoincrement())
-  name              String
-  price             Float
-  image             String
-  created_at   DateTime @default(now())
-  updated_at   DateTime?
-  transactions      Transaction[]
-  inventory         Inventory[]
+model ProductDetails {
+  productdetails_id   Int       @id @default(autoincrement())
+  price               Float
+  image               String
+  created_at          DateTime  @default(now())
+  updated_at          DateTime?
+  inventory           Inventory?
 }
 
 model Transaction {
-  transaction_id Int        @id @default(autoincrement())
-  date_time      DateTime @default(now())
-  total_amount   Float
-  customer_id    Int
-  employee_id    Int
+  transaction_id    Int        @id @default(autoincrement())
+  date_time         DateTime   @default(now())
+  total_amount      Float
+  // customer_id       Int
+  employee_id       Int
   payment_method_id Int
-  discount_id Int
-  payment_method PaymentMethod @relation(fields: [payment_method_id], references: [payment_method_id])
-  discount       Discount? @relation(fields: [discount_id], references: [discount_id])
-  products       Product[]
-  customer       Customer   @relation(fields: [customer_id], references: [customer_id])
-  employee       Employee   @relation(fields: [employee_id], references: [employee_id])
+  // discount_id       Int?
+  payment_method    PaymentMethod  @relation(fields: [payment_method_id], references: [payment_method_id])
+  discount          Discount[]      
+  productslist      ProductList    @relation(fields: [productlist_id],references: [productlist_id])
+  productlist_id    Int            
+  // customer       Customer       @relation(fields: [customer_id], references: [customer_id])
+  employee          Employee       @relation(fields: [employee_id], references: [employee_id])
 }
 
 model Employee {
-  employee_id Int          @id @default(autoincrement())
-  name        String
-  position    String
-  username    String
-  password    String
-  image       String
-  created_at   DateTime @default(now())
-  updated_at   DateTime?
-  transactions Transaction[]
+  employee_id   Int         @id @default(autoincrement())
+  name          String
+  position      String
+  username      String
+  password      String
+  email         String
+  image         String
+  address       String
+  date_of_birth String
+  handphone     String
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?
+  transactions  Transaction[]
 }
 
 model PaymentMethod {
   payment_method_id Int        @id @default(autoincrement())
-  name             String
-  transactions     Transaction[]
+  name              String
+  transactions      Transaction[]
 }
 
 model Discount {
-  discount_id Int        @id @default(autoincrement())
-  name        String
-  percentage  Float
-  created_at   DateTime @default(now())
-  updated_at   DateTime?
-  transactions Transaction[]
+  discount_id   Int         @id @default(autoincrement())
+  name          String
+  percentage    Float
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?
+  transactions  Transaction[]
 }
 
 model Inventory {
-  product_id          Int      @id
+  inventory_id        Int      @id
   quantity_in_stock   Int
-  created_at   DateTime @default(now())
-  updated_at   DateTime?
-  product             Product  @relation(fields: [product_id], references: [product_id])
+  created_at          DateTime @default(now())
+  updated_at          DateTime?
+  productdetails      ProductDetails  @relation(fields: [productdetails_id], references: [productdetails_id])
+  productdetails_id   Int @unique
 }
