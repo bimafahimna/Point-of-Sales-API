@@ -1,10 +1,10 @@
 import "./App.css";
-import { Button } from "@chakra-ui/react";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <>
-      <Button>Button</Button>
+      <Dashboard />
     </>
   );
 }
