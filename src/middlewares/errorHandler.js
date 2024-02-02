@@ -1,8 +1,7 @@
+const prisma = require("../config/database");
+
 const errorHandler = (err, req, res, next) => {
-  if (
-    err instanceof prisma.PrismaClientKnownRequestError &&
-    err.code === "P2002"
-  ) {
+  if (err.code === "P2002") {
     // This error code means a unique constraint was violated (e.g. the product_id already exists)
     res
       .status(400)

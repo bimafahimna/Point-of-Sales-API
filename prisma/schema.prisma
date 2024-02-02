@@ -46,9 +46,9 @@ model Transaction {
   payment_method_id Int
   // discount_id       Int?
   payment_method    PaymentMethod  @relation(fields: [payment_method_id], references: [payment_method_id])
-  discount          Discount[]      
+  discount          Discount[]
   productslist      ProductList    @relation(fields: [productlist_id],references: [productlist_id])
-  productlist_id    Int            
+  productlist_id    Int
   // customer       Customer       @relation(fields: [customer_id], references: [customer_id])
   employee          Employee       @relation(fields: [employee_id], references: [employee_id])
 }
@@ -57,9 +57,9 @@ model Employee {
   employee_id   Int         @id @default(autoincrement())
   name          String
   position      String
-  username      String
+  username      String      @unique
   password      String
-  email         String
+  email         String      @unique
   image         String
   address       String
   date_of_birth String

@@ -1,15 +1,12 @@
 const express = require('express');
-const authController = require('../controllers/authController');
+const authRoutes = require('./authRoutes');
 const productRoutes = require('./productRoutes');
 const inventoryRoutes = require('./inventoryRoutes');
 
 const router = express.Router();
 
-// Register endpoint
-router.post('/register', authController.register);
-// Login endpoint
-router.post('/login', authController.login);
-
+// Auth routes
+router.use('/auth', authRoutes);
 // Product routes
 router.use('/products', productRoutes);
 // Inventory routes
