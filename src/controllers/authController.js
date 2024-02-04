@@ -5,7 +5,7 @@ const prisma = require("../config/database");
 const saltRounds = Number(process.env.SALT_ROUNDS); // salt rounds diganti .env biar secure
 
 const register = async (req, res, next) => {
-  const {
+  let {
     name,
     username,
     email,
@@ -19,6 +19,12 @@ const register = async (req, res, next) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const defaultImage = "https://via.placeholder.com/150";
+    if (!image) {
+      image = defaultImage;
+    }
+
     const user = await prisma.employee.create({
       data: {
         name,
