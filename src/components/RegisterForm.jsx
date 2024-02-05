@@ -8,6 +8,8 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
+  Text,
+  Container,
 } from "@chakra-ui/react";
 
 import registerSchema from "../schemas/registerSchema";
@@ -105,6 +107,25 @@ const RegisterForm = () => {
 
   return (
     <>
+      <Container
+        m="0"
+        p="0"
+        display={form === "account" ? "flex" : "none"}
+        flexDir="column"
+        gap="1rem"
+        mb="1rem"
+      >
+        <Text fontSize="lg" fontWeight="semibold">
+          Sederhana POS
+        </Text>
+        <Text fontSize="3xl" fontWeight="semibold">
+          Register POS Account
+        </Text>
+        <Text fontSize="sm" mb={4} color="gray">
+          Welcome! Please register your account.
+        </Text>
+      </Container>
+
       <Formik
         initialValues={initialValues}
         validationSchema={registerSchema}
@@ -112,19 +133,9 @@ const RegisterForm = () => {
       >
         {(formik) => (
           <Form>
-            <Grid
-              width={{
-                base: "100%",
-                md: "75%",
-                lg: "50%",
-              }}
-              gap={6}
-            >
-              <GridItem
-                colSpan={1}
-                display={form === "personal" ? "none" : "block"}
-              >
-                {accountForms.map((form) => (
+            <Grid gap={2} display={form === "personal" ? "none" : "grid"}>
+              {accountForms.map((form) => (
+                <GridItem>
                   <FormControl
                     key={form.id}
                     id={form.id}
@@ -141,14 +152,13 @@ const RegisterForm = () => {
                       {formik.errors[form.id]}
                     </FormErrorMessage>
                   </FormControl>
-                ))}
-              </GridItem>
+                </GridItem>
+              ))}
+            </Grid>
 
-              <GridItem
-                colSpan={1}
-                display={form === "account" ? "none" : "block"}
-              >
-                {personalForms.map((form) => (
+            <Grid gap={2} display={form === "account" ? "none" : "grid"}>
+              {personalForms.map((form) => (
+                <GridItem>
                   <FormControl
                     key={form.id}
                     id={form.id}
@@ -165,22 +175,27 @@ const RegisterForm = () => {
                       {formik.errors[form.id]}
                     </FormErrorMessage>
                   </FormControl>
-                ))}
-              </GridItem>
+                </GridItem>
+              ))}
+            </Grid>
 
-              <GridItem display={"flex"} flexDir={"column"}>
+            <Grid mt={8}>
+              <GridItem display="flex" flexDir="column">
                 {form === "account" ? (
                   <Button
                     onClick={handleFormChange}
-                    colorScheme="teal"
+                    colorScheme="yellow"
                     variant="outline"
+                    isDisabled={accountForms.some(
+                      (form) => formik.values[form.id] === ""
+                    )}
                   >
                     Next
                   </Button>
                 ) : (
                   <Button
                     onClick={handleFormChange}
-                    colorScheme="teal"
+                    colorScheme="yellow"
                     variant="outline"
                   >
                     Back
@@ -189,7 +204,7 @@ const RegisterForm = () => {
                 {form === "personal" && (
                   <Button
                     mt={4}
-                    colorScheme="teal"
+                    colorScheme="yellow"
                     isLoading={formik.isSubmitting}
                     type="submit"
                   >

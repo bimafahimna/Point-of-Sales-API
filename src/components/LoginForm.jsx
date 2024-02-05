@@ -7,6 +7,8 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
+  Text,
+  Container,
 } from "@chakra-ui/react";
 
 import loginSchema from "../schemas/loginSchema";
@@ -42,6 +44,18 @@ const LoginForm = () => {
 
   return (
     <>
+      <Container p="0" display="flex" flexDir="column" gap="1rem" mb="1rem">
+        <Text fontSize="lg" fontWeight="semibold">
+          Sederhana POS
+        </Text>
+        <Text fontSize="3xl" fontWeight="semibold">
+          Login POS Account
+        </Text>
+        <Text fontSize="sm" mb={4} color="gray">
+          Welcome! Please login to your account to enter the dashboard.
+        </Text>
+      </Container>
+
       <Formik
         initialValues={initialValues}
         validationSchema={loginSchema}
@@ -49,15 +63,7 @@ const LoginForm = () => {
       >
         {(formik) => (
           <Form>
-            <Grid
-              width={{
-                base: "100%",
-                md: "75%",
-                lg: "50%",
-              }}
-              templateColumns="1fr"
-              gap={4}
-            >
+            <Grid gap={2}>
               <GridItem>
                 <FormControl
                   id="usernameOrEmail"
@@ -96,8 +102,11 @@ const LoginForm = () => {
               <GridItem>
                 <Button
                   type="submit"
-                  colorScheme="teal"
+                  colorScheme="yellow"
                   isLoading={formik.isSubmitting}
+                  width="100%"
+                  mt={4}
+                  fontSize="lg"
                 >
                   Login
                 </Button>
