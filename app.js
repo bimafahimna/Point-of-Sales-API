@@ -1,8 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieSession = require("cookie-session");
-const prisma = require('./src/config/database');
-const router = require("./src/routes/main")
+const cors = require("cors");
+const prisma = require("./src/config/database");
+const router = require("./src/routes/main");
 const errorHandler = require("./src/middlewares/errorHandler");
 
 dotenv.config();
@@ -11,6 +12,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(
   cookieSession({
     name: "session",
@@ -23,16 +32,16 @@ app.use(
   })
 );
 
-app.use('/api', router);
+app.use("/api", router);
 app.use(errorHandler);
 
-
-prisma.$connect()
+prisma
+  .$connect()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('Error connecting to the database:', error);
+    console.error("Error connecting to the database:", error);
   });
