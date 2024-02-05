@@ -92,3 +92,12 @@ model Inventory {
   productdetails      ProductDetails  @relation(fields: [productdetails_id], references: [productdetails_id])
   productdetails_id   Int @unique
 }
+
+model Cart {
+  id              Int       @id @default(autoincrement())
+  productlist_id  Int
+  quantity        Int
+  total           Float     @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
