@@ -28,20 +28,6 @@ const {
   updateTransaction,
   deleteTransaction,
 } = require("../controllers/transactionController");
-const {
-  createInventory,
-  getInventories,
-  getInventoryByProduct,
-  updateInventory,
-  deleteInventory,
-} = require("../controllers/inventoryController");
-const {
-  createProduct,
-  getProducts,
-  getProductById,
-  updateProduct,
-  deleteProduct,
-} = require("../controllers/productController");
 
 const router = express.Router();
 
