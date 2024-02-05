@@ -1,6 +1,7 @@
-import { Grid, GridItem, Show } from "@chakra-ui/react";
+import { Grid, GridItem, Input, Show } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import DashboardGrid from "../components/DashboardGrid";
+import TotalAmount from "../components/TotalAmount";
 
 function Dashboard() {
   return (
@@ -15,10 +16,17 @@ function Dashboard() {
       </GridItem>
       <Show above="lg">
         <GridItem area="aside" width="200px">
-          aside
+          <TotalAmount />
         </GridItem>
       </Show>
       <GridItem area="main">
+        <Input
+          marginTop={8}
+          marginLeft={10}
+          width="93%"
+          placeholder="Search For Menu..."
+          borderRadius={20}
+        />
         <DashboardGrid />
       </GridItem>
     </Grid>
