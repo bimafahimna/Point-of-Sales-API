@@ -29,6 +29,13 @@ const {
   deleteTransaction,
 } = require("../controllers/transactionController");
 
+const {
+  createDiscount,
+  getDiscounts,
+  updateDiscount,
+  deleteDiscount
+} = require('../controllers/discountController')
+
 const router = express.Router();
 
 router.post("/register", register);
@@ -58,5 +65,11 @@ router.get("/transactions", getTransactions);
 router.get("/transactions/:transactionCode", getTransactionDetails);
 router.put("/transactions/:transactionCode", updateTransaction);
 router.delete("/transactions/:transactionCode", deleteTransaction);
+
+router.post("/discounts", createDiscount);
+router.get("/discounts", getDiscounts);
+router.put("/discounts/:discount_id", updateDiscount);
+router.delete("/discounts/:discount_id", deleteDiscount);
+
 
 module.exports = router;
