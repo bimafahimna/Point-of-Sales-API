@@ -64,12 +64,13 @@ model PaymentMethod {
 }
 
 model Discount {
-  discount_id   Int         @id @default(autoincrement())
-  name          String
-  percentage    Float
-  created_at    DateTime    @default(now())
-  updated_at    DateTime?
-  transactions  Transaction[]
+  discount_id     Int         @id @default(autoincrement())
+  name            String
+  percentage      Float
+  discount_code   String      @unique
+  created_at      DateTime    @default(now())
+  updated_at      DateTime?
+  transactions    Transaction[]
 }
 
 model Inventory {
