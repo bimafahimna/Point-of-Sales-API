@@ -49,10 +49,6 @@ const login = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   try {
-    // if ((!username || !email) || !password) {
-    //   return res.status(400).json({ error: "Invalid input" });
-    // }
-
     let user;
 
     if (username) {
