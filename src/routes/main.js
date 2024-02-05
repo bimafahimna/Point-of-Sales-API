@@ -36,6 +36,10 @@ const {
   deleteDiscount
 } = require('../controllers/discountController')
 
+const {
+  getCheckOut
+} = require('../controllers/checkoutController')
+
 const router = express.Router();
 
 router.post("/register", register);
@@ -70,6 +74,8 @@ router.post("/discounts", createDiscount);
 router.get("/discounts", getDiscounts);
 router.put("/discounts/:discount_id", updateDiscount);
 router.delete("/discounts/:discount_id", deleteDiscount);
+
+router.get("/checkout", getCheckOut);
 
 
 module.exports = router;
