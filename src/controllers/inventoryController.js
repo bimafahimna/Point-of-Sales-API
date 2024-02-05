@@ -1,4 +1,4 @@
-const prisma = require("@prisma/client");
+const prisma = require('../config/database');
 
 const createInventory = async (req, res, next) => {
   const { product_id, quantity_in_stock } = req.body;
