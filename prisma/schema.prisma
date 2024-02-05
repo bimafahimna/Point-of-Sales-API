@@ -14,6 +14,7 @@ datasource db {
 model ProductList {
   productlist_id        Int      @id @default(autoincrement())
   name                  String
+  productdetail         ProductDetails?
   created_at            DateTime  @default(now())
   updated_at            DateTime  @updatedAt
   transactions          Transaction[]
@@ -21,11 +22,13 @@ model ProductList {
 
 model ProductDetails {
   productdetails_id   Int       @id @default(autoincrement())
+  product_id          Int       @unique
   price               Float
   image               String
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
   inventory           Inventory?
+  product             ProductList @relation(fields: [product_id],references: [productlist_id])
 }
 
 model Transaction {
@@ -34,26 +37,25 @@ model Transaction {
   total_amount      Float
   employee_id       Int
   payment_method_id Int
-  payment_method    PaymentMethod  @relation(fields: [payment_method_id], references: [payment_method_id])
   discount          Discount[]
-  productslist      ProductList    @relation(fields: [productlist_id],references: [productlist_id])
-  productlist_id    Int
+  productlists      ProductList[]
+  payment_method    PaymentMethod  @relation(fields: [payment_method_id], references: [payment_method_id])
   employee          Employee       @relation(fields: [employee_id], references: [employee_id])
 }
 
 model Employee {
-  employee_id   Int         @id @default(autoincrement())
+  employee_id   Int           @id @default(autoincrement())
   name          String
   position      String
-  username      String      @unique
+  username      String        @unique
   password      String
-  email         String      @unique
+  email         String        @unique
   image         String
   address       String
   date_of_birth String
   handphone     String
-  created_at    DateTime    @default(now())
-  updated_at    DateTime?    @updatedAt
+  created_at    DateTime      @default(now())
+  updated_at    DateTime?     @updatedAt
   transactions  Transaction[]
 }
 
