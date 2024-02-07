@@ -35,7 +35,7 @@ const register = async (req, res, next) => {
         image,
         address,
         date_of_birth,
-        handphone,
+        handphone:"0"+String(handphone),
       },
     });
 
