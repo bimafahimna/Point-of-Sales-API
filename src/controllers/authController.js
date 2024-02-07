@@ -78,7 +78,7 @@ const login = async (req, res, next) => {
     }
 
     const payload = {
-      userId: user.employee_id,
+      userId: user.username,
       username: user.username,
       email: user.email,
       position: user.position,
@@ -102,8 +102,86 @@ const logout = (req, res) => {
   res.status(200).json({ message: "Logout success" });
 };
 
+const changePassword = async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  const { username } = req.user;
+
+  try {
+    const user = await prisma.employee.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!oldPassword || !newPassword) {
+      return res
+        .status(400)
+        .json({ error: "New password cannot be the same as old password" });
+    }
+
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    const updatedUser = await prisma.employee.update({
+      where: {
+        username: username,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    res.status(200).json({ message: "Password updated", data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateAccount = async (req, res, next) => {
+  const { username, email, position } = req.body;
+  const { username: currentUsername } = req.user;
+
+  try {
+    const user = await prisma.employee.findUnique({
+      where: {
+        username: currentUsername,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const updatedUser = await prisma.employee.update({
+      where: {
+        username: currentUsername,
+      },
+      data: {
+        username,
+        email,
+        position,
+      },
+    });
+
+    res.status(200).json({ message: "Account updated", data: updatedUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
+  changePassword,
+  updateAccount,
 };

@@ -1,5 +1,17 @@
 const express = require("express");
-const { register, login, logout } = require("../controllers/authController");
+const {
+  register,
+  login,
+  logout,
+  changePassword,
+  updateAccount,
+} = require("../controllers/authController");
+const {
+  getEmployees,
+  getEmployeeByUsername,
+  updateEmployee,
+  deleteEmployee,
+} = require("../controllers/employeeController");
 const {
   createInventory,
   getInventories,
@@ -33,18 +45,23 @@ const {
   createDiscount,
   getDiscounts,
   updateDiscount,
-  deleteDiscount
-} = require('../controllers/discountController')
+  deleteDiscount,
+} = require("../controllers/discountController");
 
-const {
-  getCheckOut
-} = require('../controllers/checkoutController')
+const { getCheckOut } = require("../controllers/checkoutController");
 
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
+router.post("/change-password", changePassword);
+router.put("/update-account", updateAccount);
+
+router.get("/employees", getEmployees);
+router.get("/employees/:username", getEmployeeByUsername);
+router.put("/employees/:username", updateEmployee);
+router.delete("/employees/:username", deleteEmployee);
 
 router.post("/inventories/", createInventory);
 router.get("/inventories/", getInventories);
@@ -76,6 +93,5 @@ router.put("/discounts/:discount_id", updateDiscount);
 router.delete("/discounts/:discount_id", deleteDiscount);
 
 router.get("/checkout", getCheckOut);
-
 
 module.exports = router;
